@@ -219,7 +219,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   addTask(String title, String task) {
     //add task
     final time = Time(hour: _time.hour, minute: _time.minute);
-    var taskAndTitle = Task(title: title, task: task, time: time , taskType: getTaskTypeList()[1]);
+    var taskAndTitle = Task(title: title, task: task, time: time , taskType: getTaskTypeList()[_selectedTaskTypeitem]);
     box.add(taskAndTitle);
   }
 

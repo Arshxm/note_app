@@ -79,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
         taskB.delete();
       },
       key: UniqueKey(),
-      child: TaskWidget(task: taskB),
+      child: TaskWidget(task: taskB ),
     );
   }
 

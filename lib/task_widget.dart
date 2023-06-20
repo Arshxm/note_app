@@ -4,6 +4,7 @@ import 'package:hive/hive.dart';
 import 'package:msh_checkbox/msh_checkbox.dart';
 import 'package:note_app/edit_task_screen.dart';
 import 'package:note_app/task.dart';
+import 'package:note_app/utility.dart';
 
 class TaskWidget extends StatefulWidget {
   TaskWidget({super.key, required this.task});
@@ -43,17 +44,17 @@ class _TaskWidgetState extends State<TaskWidget> {
         ),
         child: Padding(
           padding: EdgeInsets.all(12),
-          child: getMainItem(widget.task.title, widget.task.task),
+          child: getMainItem(widget.task.title, widget.task.task, widget.task.taskType.image ),
         ),
       ),
     );
   }
 
-  Widget getMainItem(title, task) {
+  Widget getMainItem(title, task, taskTypeImage) {
     return Row(
       mainAxisSize: MainAxisSize.max,
       children: [
-        Image.asset('images/workout.png'),
+        Image.asset(taskTypeImage),
         SizedBox(
           width: 15,
         ),
