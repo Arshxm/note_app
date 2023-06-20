@@ -2,6 +2,9 @@ import 'package:day_night_time_picker/day_night_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:note_app/task.dart';
+import 'package:note_app/utility.dart';
+
+import 'add_task_screen.dart';
 
 class EditTaskScreen extends StatefulWidget {
   EditTaskScreen({super.key, required this.task});
@@ -20,7 +23,8 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
 
   var box = Hive.box<Task>('taskBox');
 
-  Time? _time;
+  Time _time = Time(hour: 10, minute: 00);
+  int _selectedTaskTypeitem = 0;
 
   void onTimeChanged(Time newTime) {
     setState(() {
@@ -37,12 +41,15 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
     textFieldTitle = TextEditingController(text: widget.task.title);
 
     _time = Time(hour: widget.task.time.hour, minute: widget.task.time.minute);
+
     negahban1.addListener(() {
       setState(() {});
     });
     negahban2.addListener(() {
       setState(() {});
     });
+
+    _selectedTaskTypeitem = widget.task.taskType.taskTypeEnum.index;
   }
 
   Widget build(BuildContext context) {
@@ -57,7 +64,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 44),
               child: TextField(
-                maxLength: 15,
+                maxLength: 25,
                 controller: textFieldTitle,
                 focusNode: negahban1,
                 decoration: InputDecoration(
@@ -120,25 +127,79 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
               ),
             ),
             SizedBox(
-              height: 10,
+              height: 90,
             ),
-            showPicker(
-                buttonsSpacing: 140,
-                elevation: 8,
-                cancelStyle: TextStyle(
-                    color: Colors.red,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16),
-                okText: "Set",
-                okStyle: TextStyle(
-                    color: Color(0xff18DAA3),
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20),
-                accentColor: Color(0xff18DAA3),
-                isInlinePicker: true,
-                context: context,
-                value: _time!,
-                onChange: onTimeChanged),
+            InkWell(
+              onTap: () {
+                Navigator.of(context).push(
+                  showPicker(
+                      blurredBackground: true,
+                      buttonsSpacing: 140,
+                      elevation: 8,
+                      cancelStyle: TextStyle(
+                          color: Colors.red,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16),
+                      okText: "Set",
+                      okStyle: TextStyle(
+                          color: Color(0xff18DAA3),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20),
+                      accentColor: Color(0xff18DAA3),
+                      context: context,
+                      value: _time,
+                      onChange: onTimeChanged),
+                );
+              },
+              child: Material(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(15),
+                ),
+                elevation: 10,
+                child: Container(
+                  width: 300,
+                  height: 150,
+                  decoration: BoxDecoration(),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "${_time.hour} : ${getMinUnderTen(_time)}",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 90,
+                            color: Color(0xff18DAA3)),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 90,
+            ),
+            Container(
+              height: 200,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: getTaskTypeList().length,
+                itemBuilder: ((context, index) {
+                  return InkWell(
+                    onTap: () {
+                      setState(() {
+                         _selectedTaskTypeitem = index;
+                      });
+                    },
+                    child: TaskTypeItemList(
+                      taskType: getTaskTypeList()[index],
+                      selectedItemType: _selectedTaskTypeitem,
+                      index: index,
+                    ),
+                  );
+                }),
+              ),
+            ),
             Spacer(),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
@@ -166,6 +227,15 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
     widget.task.task = textFieldTask!.text;
     widget.task.title = textFieldTitle!.text;
     widget.task.time = _time!;
+    widget.task.taskType = getTaskTypeList()[_selectedTaskTypeitem];
     widget.task.save();
+  }
+
+  String getMinUnderTen(Time time) {
+    if (time.minute < 10) {
+      return "0${time.minute}";
+    } else {
+      return "${time.minute}";
+    }
   }
 }

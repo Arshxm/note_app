@@ -4,9 +4,9 @@ import 'package:note_app/type_enum.dart';
 List<TaskType> getTaskTypeList() {
   var list = [
     TaskType(
-      image: "images/meditate.png",
-      title: 'Meditation',
-      taskTypeEnum: TaskTypeEnum.meditating,
+      image: "images/hard_working.png",
+      title: 'Working',
+      taskTypeEnum: TaskTypeEnum.working,
     ),
     TaskType(
       image: "images/social_frends.png",
@@ -14,9 +14,9 @@ List<TaskType> getTaskTypeList() {
       taskTypeEnum: TaskTypeEnum.meeting,
     ),
     TaskType(
-      image: "images/hard_working.png",
-      title: 'Working',
-      taskTypeEnum: TaskTypeEnum.working,
+      image: "images/meditate.png",
+      title: 'Meditating',
+      taskTypeEnum: TaskTypeEnum.meditating,
     ),
     TaskType(
       image: "images/banking.png",

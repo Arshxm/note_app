@@ -26,7 +26,7 @@ class _TaskWidgetState extends State<TaskWidget> {
   }
 
   Widget getTaskItem() {
-    return GestureDetector(
+    return InkWell(
       onTap: () {
         setState(() {
           isBoxChecked = !isBoxChecked;
@@ -63,13 +63,12 @@ class _TaskWidgetState extends State<TaskWidget> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.max,
             children: [
-              Expanded(
-                child: Row(
+            
+             Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    LayoutBuilder(
-                      builder: (context, constraints) {
-                        return SizedBox(
+                 
+                        SizedBox(
                           width: 180,
                           child: Text(
                             "$title",
@@ -77,13 +76,13 @@ class _TaskWidgetState extends State<TaskWidget> {
                                 fontWeight: FontWeight.bold, fontSize: 18),
                             overflow: TextOverflow.ellipsis,
                           ),
-                        );
-                      },
-                    ),
+                        ),
+                      
+                    
                     getCheckBox()
                   ],
                 ),
-              ),
+              
               Text(
                 "$task",
                 style: TextStyle(

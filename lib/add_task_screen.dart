@@ -15,6 +15,8 @@ class AddTaskScreen extends StatefulWidget {
 }
 
 class _AddTaskScreenState extends State<AddTaskScreen> {
+
+
   FocusNode negahban1 = FocusNode();
   FocusNode negahban2 = FocusNode();
 
@@ -57,7 +59,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 44),
               child: TextField(
-                maxLength: 15,
+                maxLength: 25,
                 controller: textFieldTitle,
                 focusNode: negahban1,
                 decoration: InputDecoration(
