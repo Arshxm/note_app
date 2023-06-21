@@ -2,9 +2,9 @@ import 'package:day_night_time_picker/lib/state/time.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:msh_checkbox/msh_checkbox.dart';
-import 'package:note_app/edit_task_screen.dart';
 
-import 'data/task.dart';
+import '../data/task.dart';
+import '../screens/edit_task_screen.dart';
 
 class TaskWidget extends StatefulWidget {
   TaskWidget({super.key, required this.task});

@@ -1,5 +1,5 @@
-import 'data/task_type.dart';
-import 'data/type_enum.dart';
+import '../data/task_type.dart';
+import '../data/type_enum.dart';
 
 List<TaskType> getTaskTypeList() {
   var list = [

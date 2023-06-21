@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:note_app/add_task_screen.dart';
-import 'package:note_app/task_widget.dart';
 
-import 'data/task.dart';
+import '../data/task.dart';
+import '../widget/task_widget.dart';
+import 'add_task_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({super.key});
@@ -71,7 +71,6 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
-    
   }
 
   Widget getTaskWidget(Task taskB) {
@@ -80,9 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
         taskB.delete();
       },
       key: UniqueKey(),
-      child: TaskWidget(task: taskB ),
+      child: TaskWidget(task: taskB),
     );
   }
-
-  
 }

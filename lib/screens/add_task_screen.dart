@@ -1,29 +1,24 @@
-import 'package:day_night_time_picker/day_night_time_picker.dart';
+import 'package:day_night_time_picker/lib/daynight_timepicker.dart';
+import 'package:day_night_time_picker/lib/state/time.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:note_app/task_type_list.dart';
-import 'package:note_app/utility.dart';
-import 'data/task.dart';
+import 'package:note_app/data/task.dart';
 
-class EditTaskScreen extends StatefulWidget {
-  EditTaskScreen({super.key, required this.task});
-  Task task;
+import '../utility/utility.dart';
+import '../widget/task_type_list.dart';
+
+class AddTaskScreen extends StatefulWidget {
+  const AddTaskScreen({super.key});
 
   @override
-  State<EditTaskScreen> createState() => _EditTaskScreenState();
+  State<AddTaskScreen> createState() => _AddTaskScreenState();
 }
 
-class _EditTaskScreenState extends State<EditTaskScreen> {
+class _AddTaskScreenState extends State<AddTaskScreen> {
   FocusNode guardian1 = FocusNode();
   FocusNode guardian2 = FocusNode();
 
-  TextEditingController? textFieldTitle;
-  TextEditingController? textFieldTask;
-
-  var box = Hive.box<Task>('taskBox');
-
-  Time _time = Time(hour: 10, minute: 00);
-  int _selectedTaskItemType = 0;
+  Time _time = Time(hour: 12, minute: 00);
 
   void onTimeChanged(Time newTime) {
     setState(() {
@@ -31,24 +26,22 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
     });
   }
 
+  final TextEditingController textFieldTitle = TextEditingController();
+  final TextEditingController textFieldTask = TextEditingController();
+
+  int _selectedTaskItemType = 0;
+
+  var box = Hive.box<Task>('taskBox');
+
   @override
   void initState() {
-    
     super.initState();
-
-    textFieldTask = TextEditingController(text: widget.task.task);
-    textFieldTitle = TextEditingController(text: widget.task.title);
-
-    _time = Time(hour: widget.task.time.hour, minute: widget.task.time.minute);
-
     guardian1.addListener(() {
       setState(() {});
     });
     guardian2.addListener(() {
       setState(() {});
     });
-
-    _selectedTaskItemType = widget.task.taskType.taskTypeEnum.index;
   }
 
   Widget build(BuildContext context) {
@@ -58,7 +51,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
           mainAxisSize: MainAxisSize.min,
           children: [
             SizedBox(
-              height: 30,
+              height: 20,
             ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 44),
@@ -187,7 +180,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                   return InkWell(
                     onTap: () {
                       setState(() {
-                         _selectedTaskItemType = index;
+                        _selectedTaskItemType = index;
                       });
                     },
                     child: TaskTypeItemList(
@@ -205,11 +198,11 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                   backgroundColor: Color(0xff18DAA3),
                   minimumSize: Size(150, 50)),
               onPressed: () {
-                addTask(textFieldTitle!.text, textFieldTask!.text);
+                addTask(textFieldTitle.text, textFieldTask.text);
                 Navigator.of(context).pop();
               },
               child: Text(
-                'Edit Task',
+                'Add Task',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
             ),
@@ -223,11 +216,14 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
   }
 
   addTask(String title, String task) {
-    widget.task.task = textFieldTask!.text;
-    widget.task.title = textFieldTitle!.text;
-    widget.task.time = _time;
-    widget.task.taskType = getTaskTypeList()[_selectedTaskItemType];
-    widget.task.save();
+    //add task
+    final time = Time(hour: _time.hour, minute: _time.minute);
+    var taskAndTitle = Task(
+        title: title,
+        task: task,
+        time: time,
+        taskType: getTaskTypeList()[_selectedTaskItemType]);
+    box.add(taskAndTitle);
   }
 
   String getMinUnderTen(Time time) {
@@ -236,5 +232,26 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
     } else {
       return "${time.minute}";
     }
+  }
+}
+
+class TimeAdapter extends TypeAdapter<Time> {
+  @override
+  final int typeId = 1; // Unique identifier for the adapter
+
+  @override
+  Time read(BinaryReader reader) {
+    final hour = reader.readInt();
+    final minute = reader.readInt();
+    return Time(
+      hour: hour,
+      minute: minute,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, Time obj) {
+    writer.writeInt(obj.hour);
+    writer.writeInt(obj.minute);
   }
 }
