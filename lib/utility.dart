@@ -1,5 +1,5 @@
-import 'package:note_app/task_type.dart';
-import 'package:note_app/type_enum.dart';
+import 'data/task_type.dart';
+import 'data/type_enum.dart';
 
 List<TaskType> getTaskTypeList() {
   var list = [
@@ -9,7 +9,7 @@ List<TaskType> getTaskTypeList() {
       taskTypeEnum: TaskTypeEnum.working,
     ),
     TaskType(
-      image: "images/social_frends.png",
+      image: "images/social_friends.png",
       title: 'Meeting',
       taskTypeEnum: TaskTypeEnum.meeting,
     ),

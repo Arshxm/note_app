@@ -1,6 +1,6 @@
 
 import 'package:hive/hive.dart';
-import 'package:note_app/type_enum.dart';
+import 'package:note_app/data/type_enum.dart';
 
 part "task_type.g.dart";
 

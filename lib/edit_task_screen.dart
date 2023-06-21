@@ -1,10 +1,9 @@
 import 'package:day_night_time_picker/day_night_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:note_app/task.dart';
+import 'package:note_app/task_type_list.dart';
 import 'package:note_app/utility.dart';
-
-import 'add_task_screen.dart';
+import 'data/task.dart';
 
 class EditTaskScreen extends StatefulWidget {
   EditTaskScreen({super.key, required this.task});
@@ -15,8 +14,8 @@ class EditTaskScreen extends StatefulWidget {
 }
 
 class _EditTaskScreenState extends State<EditTaskScreen> {
-  FocusNode negahban1 = FocusNode();
-  FocusNode negahban2 = FocusNode();
+  FocusNode guardian1 = FocusNode();
+  FocusNode guardian2 = FocusNode();
 
   TextEditingController? textFieldTitle;
   TextEditingController? textFieldTask;
@@ -24,7 +23,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
   var box = Hive.box<Task>('taskBox');
 
   Time _time = Time(hour: 10, minute: 00);
-  int _selectedTaskTypeitem = 0;
+  int _selectedTaskItemType = 0;
 
   void onTimeChanged(Time newTime) {
     setState(() {
@@ -34,7 +33,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
+    
     super.initState();
 
     textFieldTask = TextEditingController(text: widget.task.task);
@@ -42,14 +41,14 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
 
     _time = Time(hour: widget.task.time.hour, minute: widget.task.time.minute);
 
-    negahban1.addListener(() {
+    guardian1.addListener(() {
       setState(() {});
     });
-    negahban2.addListener(() {
+    guardian2.addListener(() {
       setState(() {});
     });
 
-    _selectedTaskTypeitem = widget.task.taskType.taskTypeEnum.index;
+    _selectedTaskItemType = widget.task.taskType.taskTypeEnum.index;
   }
 
   Widget build(BuildContext context) {
@@ -66,7 +65,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
               child: TextField(
                 maxLength: 25,
                 controller: textFieldTitle,
-                focusNode: negahban1,
+                focusNode: guardian1,
                 decoration: InputDecoration(
                   contentPadding:
                       EdgeInsets.symmetric(horizontal: 15, vertical: 15),
@@ -74,7 +73,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                   labelStyle: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
-                      color: negahban1.hasFocus
+                      color: guardian1.hasFocus
                           ? Color(0xff18DAA3)
                           : Color(0xffC5C5C5)),
                   enabledBorder: OutlineInputBorder(
@@ -99,7 +98,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
               padding: EdgeInsets.symmetric(horizontal: 44),
               child: TextField(
                 controller: textFieldTask,
-                focusNode: negahban2,
+                focusNode: guardian2,
                 maxLines: 2,
                 decoration: InputDecoration(
                   contentPadding:
@@ -108,7 +107,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                   labelStyle: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
-                      color: negahban2.hasFocus
+                      color: guardian2.hasFocus
                           ? Color(0xff18DAA3)
                           : Color(0xffC5C5C5)),
                   enabledBorder: OutlineInputBorder(
@@ -188,12 +187,12 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                   return InkWell(
                     onTap: () {
                       setState(() {
-                         _selectedTaskTypeitem = index;
+                         _selectedTaskItemType = index;
                       });
                     },
                     child: TaskTypeItemList(
                       taskType: getTaskTypeList()[index],
-                      selectedItemType: _selectedTaskTypeitem,
+                      selectedItemType: _selectedTaskItemType,
                       index: index,
                     ),
                   );
@@ -226,8 +225,8 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
   addTask(String title, String task) {
     widget.task.task = textFieldTask!.text;
     widget.task.title = textFieldTitle!.text;
-    widget.task.time = _time!;
-    widget.task.taskType = getTaskTypeList()[_selectedTaskTypeitem];
+    widget.task.time = _time;
+    widget.task.taskType = getTaskTypeList()[_selectedTaskItemType];
     widget.task.save();
   }
 

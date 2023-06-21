@@ -2,9 +2,8 @@ import 'package:day_night_time_picker/lib/daynight_timepicker.dart';
 import 'package:day_night_time_picker/lib/state/time.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:note_app/task.dart';
-import 'package:note_app/task_type.dart';
-import 'package:note_app/type_enum.dart';
+import 'package:note_app/data/task.dart';
+import 'package:note_app/task_type_list.dart';
 import 'package:note_app/utility.dart';
 
 class AddTaskScreen extends StatefulWidget {
@@ -17,8 +16,8 @@ class AddTaskScreen extends StatefulWidget {
 class _AddTaskScreenState extends State<AddTaskScreen> {
 
 
-  FocusNode negahban1 = FocusNode();
-  FocusNode negahban2 = FocusNode();
+  FocusNode guardian1 = FocusNode();
+  FocusNode guardian2 = FocusNode();
 
   Time _time = Time(hour: 12, minute: 00);
 
@@ -31,18 +30,17 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   final TextEditingController textFieldTitle = TextEditingController();
   final TextEditingController textFieldTask = TextEditingController();
 
-  int _selectedTaskTypeitem = 0;
+  int _selectedTaskItemType = 0;
 
   var box = Hive.box<Task>('taskBox');
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    negahban1.addListener(() {
+    guardian1.addListener(() {
       setState(() {});
     });
-    negahban2.addListener(() {
+    guardian2.addListener(() {
       setState(() {});
     });
   }
@@ -61,7 +59,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
               child: TextField(
                 maxLength: 25,
                 controller: textFieldTitle,
-                focusNode: negahban1,
+                focusNode: guardian1,
                 decoration: InputDecoration(
                   contentPadding:
                       EdgeInsets.symmetric(horizontal: 15, vertical: 15),
@@ -69,7 +67,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                   labelStyle: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
-                      color: negahban1.hasFocus
+                      color: guardian1.hasFocus
                           ? Color(0xff18DAA3)
                           : Color(0xffC5C5C5)),
                   enabledBorder: OutlineInputBorder(
@@ -94,7 +92,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
               padding: EdgeInsets.symmetric(horizontal: 44),
               child: TextField(
                 controller: textFieldTask,
-                focusNode: negahban2,
+                focusNode: guardian2,
                 maxLines: 2,
                 decoration: InputDecoration(
                   contentPadding:
@@ -103,7 +101,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                   labelStyle: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
-                      color: negahban2.hasFocus
+                      color: guardian2.hasFocus
                           ? Color(0xff18DAA3)
                           : Color(0xffC5C5C5)),
                   enabledBorder: OutlineInputBorder(
@@ -183,12 +181,12 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                   return InkWell(
                     onTap: () {
                       setState(() {
-                        _selectedTaskTypeitem = index;
+                        _selectedTaskItemType = index;
                       });
                     },
                     child: TaskTypeItemList(
                       taskType: getTaskTypeList()[index],
-                      selectedItemType: _selectedTaskTypeitem,
+                      selectedItemType: _selectedTaskItemType,
                       index: index,
                     ),
                   );
@@ -221,7 +219,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   addTask(String title, String task) {
     //add task
     final time = Time(hour: _time.hour, minute: _time.minute);
-    var taskAndTitle = Task(title: title, task: task, time: time , taskType: getTaskTypeList()[_selectedTaskTypeitem]);
+    var taskAndTitle = Task(title: title, task: task, time: time , taskType: getTaskTypeList()[_selectedTaskItemType]);
     box.add(taskAndTitle);
   }
 
@@ -234,46 +232,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   }
 }
 
-class TaskTypeItemList extends StatelessWidget {
-  TaskTypeItemList({
-    super.key,
-    required this.taskType,
-    required this.index,
-    required this.selectedItemType,
-  });
 
-  TaskType taskType;
-
-  int index;
-  int selectedItemType;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        border: Border.all(
-            color: (selectedItemType == index)
-                ? Color(0xff18DAA3)
-                : Colors.transparent,
-            width: 3),
-        borderRadius: BorderRadius.all(
-          Radius.circular(15),
-        ),
-      ),
-      margin: EdgeInsets.all(10),
-      width: 140,
-      child: Column(
-        children: [
-          Image.asset(taskType.image),
-          Text(
-            taskType.title,
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-        ],
-      ),
-    );
-  }
-}
 
 class TimeAdapter extends TypeAdapter<Time> {
   @override

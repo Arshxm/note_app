@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:note_app/add_task_screen.dart';
-import 'package:note_app/task.dart';
 import 'package:note_app/task_widget.dart';
+
+import 'data/task.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({super.key});
@@ -30,13 +31,13 @@ class _HomeScreenState extends State<HomeScreen> {
             valueListenable: taskBox.listenable(),
             builder: ((context, value, child) {
               return NotificationListener<UserScrollNotification>(
-                onNotification: (notif) {
-                  if (notif.direction == ScrollDirection.forward) {
+                onNotification: (notification) {
+                  if (notification.direction == ScrollDirection.forward) {
                     setState(() {
                       isFabVisible = true;
                     });
                   }
-                  if (notif.direction == ScrollDirection.reverse) {
+                  if (notification.direction == ScrollDirection.reverse) {
                     setState(() {
                       isFabVisible = false;
                     });

@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:note_app/add_task_screen.dart';
 import 'package:note_app/home_screen.dart';
-import 'package:note_app/task.dart';
-import 'package:note_app/task_type.dart';
-import 'package:note_app/time.dart';
-import 'package:note_app/type_enum.dart';
+import 'data/task.dart';
+import 'data/task_type.dart';
+import 'data/type_enum.dart';
+
 
 void main() async {
   await Hive.initFlutter();

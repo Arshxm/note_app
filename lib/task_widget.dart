@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:msh_checkbox/msh_checkbox.dart';
 import 'package:note_app/edit_task_screen.dart';
-import 'package:note_app/task.dart';
-import 'package:note_app/utility.dart';
+
+import 'data/task.dart';
 
 class TaskWidget extends StatefulWidget {
   TaskWidget({super.key, required this.task});
@@ -44,7 +44,8 @@ class _TaskWidgetState extends State<TaskWidget> {
         ),
         child: Padding(
           padding: EdgeInsets.all(12),
-          child: getMainItem(widget.task.title, widget.task.task, widget.task.taskType.image ),
+          child: getMainItem(
+              widget.task.title, widget.task.task, widget.task.taskType.image),
         ),
       ),
     );
@@ -63,26 +64,24 @@ class _TaskWidgetState extends State<TaskWidget> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.max,
             children: [
-            
-             Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                 
-                        SizedBox(
-                          width: 180,
-                          child: Text(
-                            "$title",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 18),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                      
-                    
-                    getCheckBox()
-                  ],
-                ),
-              
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(
+                    width: 180,
+                    child: Text(
+                      "$title",
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  getCheckBox()
+                ],
+              ),
+              SizedBox(
+                height: 10,
+              ),
               Text(
                 "$task",
                 style: TextStyle(
@@ -125,7 +124,9 @@ class _TaskWidgetState extends State<TaskWidget> {
                   InkWell(
                     onTap: () {
                       Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => EditTaskScreen(task: widget.task,)));
+                          builder: (context) => EditTaskScreen(
+                                task: widget.task,
+                              )));
                     },
                     child: Container(
                       width: 100,
@@ -172,15 +173,16 @@ class _TaskWidgetState extends State<TaskWidget> {
       style: MSHCheckboxStyle.fillScaleCheck,
       onChanged: (selected) {
         setState(() {
-          isBoxChecked = selected;
+          widget.task.isDone = selected;
         });
       },
     );
   }
-    String getMinUnderTen(Time time){
+
+  String getMinUnderTen(Time time) {
     if (time.minute < 10) {
       return "0${time.minute}";
-    }else{
+    } else {
       return "${time.minute}";
     }
   }
