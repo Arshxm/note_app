@@ -14,6 +14,8 @@ void main() async {
   Hive.registerAdapter(TaskTypeAdapter());
   Hive.registerAdapter(TimeAdapter());
   Hive.registerAdapter(TaskAdapter());
+
+  
   await Hive.openBox<Task>('taskBox');
 
   runApp(MyApp());
