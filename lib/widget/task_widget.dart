@@ -68,7 +68,7 @@ class _TaskWidgetState extends State<TaskWidget> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   SizedBox(
-                    width: 180,
+                    width: 150,
                     child: Text(
                       "$title",
                       style:
@@ -76,6 +76,7 @@ class _TaskWidgetState extends State<TaskWidget> {
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
+                  Spacer(),
                   getCheckBox()
                 ],
               ),
@@ -93,9 +94,8 @@ class _TaskWidgetState extends State<TaskWidget> {
               Spacer(),
               Row(
                 children: [
-                  Spacer(),
                   Container(
-                    width: 100,
+                    width: 90,
                     height: 35,
                     decoration: BoxDecoration(
                         color: Color(0xff18DAA3),
@@ -123,13 +123,16 @@ class _TaskWidgetState extends State<TaskWidget> {
                   ),
                   InkWell(
                     onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
                           builder: (context) => EditTaskScreen(
-                                task: widget.task,
-                              )));
+                            task: widget.task,
+                          ),
+                        ),
+                      );
                     },
                     child: Container(
-                      width: 100,
+                      width: 90,
                       height: 35,
                       decoration: BoxDecoration(
                         color: Color(0xffE2F6F1),
